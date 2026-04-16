@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+
+
+        <record id="product_product_normal_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.product.normal.form.inherit.emc</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[last()]" position="after">
+                    <page name="custom_fields" string="Custom Fields">
+                        <group>
+                            <group>
+                                <field name="create_mrp_order" />
+                                <field name="done_mrp_order" />
+                            </group>
+                            <group>
+
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

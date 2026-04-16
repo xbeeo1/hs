@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_medical_lab_test_units,.medical.lab.test.units,model_medical_lab_test_units,base.group_user,1,1,1,1
+access_medical_test_critearea,medical.test.critearea,model_medical_test_critearea,base.group_user,1,1,1,1
+access_medical_test_type,medical.test.type,model_medical_test_type,base.group_user,1,1,1,1
+access_medical_lab,medical.lab,model_medical_lab,base.group_user,1,1,1,1
+access_medical_patient_lab_test,medical.patient.lab.test,model_medical_patient_lab_test,base.group_user,1,1,1,1
+access_medical_lab_test_create,medical.lab.test.create,model_medical_lab_test_create,base.group_user,1,1,1,1
+access_outsourced_lab_request,outsourced.lab.request,model_outsourced_lab_request,base.group_user,1,1,1,1
+access_outsourced_lab_test_line,outsourced.lab.test.line,model_outsourced_lab_test_line,base.group_user,1,1,1,1
+access_partner_lab,partner.lab,model_partner_lab,base.group_user,1,1,1,1
+access_medical_patient_lab_test_line,medical.patient.lab.test.line,model_medical_patient_lab_test_line,base.group_user,1,1,1,1

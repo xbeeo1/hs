@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_farmer_village_tree" model="ir.ui.view">
+            <field name="name">farmer.village.tree</field>
+            <field name="model">farmer.village</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="description"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record id="view_farmer_village_form" model="ir.ui.view">
+            <field name="name">farmer.village.form</field>
+            <field name="model">farmer.village</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_farmer_village" model="ir.actions.act_window">
+            <field name="name">Farmer Village</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">farmer.village</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Your First Patient Village...!
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_farmer_village"
+                  name="Village"
+                  parent="contacts.res_partner_menu_config"
+                  action="action_farmer_village"
+                  sequence="12"/>
+
+    </data>
+</odoo>

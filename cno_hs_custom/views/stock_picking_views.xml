@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_picking_form_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//button[@name='button_validate']" position="after">
+                      <button string="Create Lab Request" name="action_lab_request_new" type="object" class="oe_highlight" data-hotkey="q"/>
+                  </xpath>
+                <xpath expr="//button[@name='action_see_returns']" position="after">
+                      <button name="action_view_lab_result" type="object" class="oe_stat_button"
+                            icon="fa-list">
+                        <field name="lab_request_count" widget="statinfo" string="Lab Result"/>
+                    </button>
+                  </xpath>
+                <xpath expr="//notebook/page[last()]" position="after">
+                    <page name="custom_fields" string="Custom Fields">
+                        <group>
+                            <group string="Farmer Information" >
+                                    <field name="bank_name" />
+                                    <field name="account_title" />
+                                    <field name="reference" />
+                                     <field name="account_number" />
+                                    <field name="sms_text" />
+                            </group>
+                            <group string="Driver Information" >
+                                    <field name="driver_name" />
+                                    <field name="driver_ph_number" />
+                                     <field name="driver_cnic" />
+                                    <field name="driver_image" />
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Vehicle Information" >
+                                    <field name="vehicle_type_id" />
+                                    <field name="vehicle_number" />
+                                     <field name="driver_cnic" />
+                                    <field name="vehicle_image" />
+                            </group>
+                             <group string="Weight Information" >
+                                    <field name="total_bags" />
+                                    <field name="first_weight" />
+                                     <field name="second_weight" />
+                                    <field name="net_weight" />
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Entry/Material Information" >
+                                    <field name="warehouse_id" />
+                                    <field name="nunber" />
+                                     <field name="e_number" />
+                                    <field name="date_in" />
+                                    <field name="date_out" />
+                                    <field name="bag_type" />
+                            </group>
+                             <group>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

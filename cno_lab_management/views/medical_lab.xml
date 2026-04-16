@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="medical_lab_tree_view" model="ir.ui.view">
+            <field name="name">medical.lab.tree.view</field>
+            <field name="model">medical.lab</field>
+            <field name="arch" type="xml">
+                <list create="false" >
+                    <field name="name" />
+                    <field name="test_id" />
+                    <field name="patient_id" />
+                    <field name="date_analysis" />
+                </list>
+            </field>
+        </record>
+
+
+
+        <record id="medical_lab_form_view" model="ir.ui.view">
+            <field name="name">medical.lab.form.view</field>
+            <field name="model">medical.lab</field>
+            <field name="arch" type="xml">
+                <form string="Laboratory Test" create="false">
+                    <sheet>
+                        <group string="Main Info">
+                            <group>
+                                <field name="name" readonly="1" />
+                                <field name="date_analysis" />
+                                <field name="requestor_physician_id"
+                                    required="1" />
+                                <field name="gate_pass_no" />
+                                <field name="vehicle_number" />
+                            </group>
+                            <group>
+                                <field name="test_id" required="1" />
+                                <field name="patient_id" required="1" />
+                                <field name="date_requested" />
+                                <field name="tokan_no" />
+                                <field name="sample_weight_gram" />
+
+                            </group>
+                        </group>
+                        <notebook> 
+                            <page string = "Total Cases">  
+                                <field name="critearea_ids" widget="section_and_note_one2many" nolabel="1">
+                                    <list editable="top" string="Test Cases">
+                                        <field name="seq" />
+                                        <field name="name" />
+                                        <field name="normal_range" />
+                                        <field name="gram" />
+                                        <field name="percentage" />
+                                    </list>
+
+                                    <form string="Test Cases">
+
+                                        <field name="name" />
+                                        <field name="seq" />
+                                        <field name="normal_range" />
+                                        <field name="gram" />
+                                        <field name="percentage" />
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+
+                        <group string="Extra Info">
+                            <field name="results" />
+                            <field name="diagnosis" />
+                        </group>
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
+        <record id="action_medical_lab_form" model="ir.actions.act_window">
+            <field name="name">Lab Tests Results</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.lab</field>
+            <field name="binding_view_types">form</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="action_medical_lab_tree" model="ir.actions.act_window">
+            <field name="name">Lab Tests Results</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.lab</field>
+            <field name="binding_view_types">list</field>
+            <field name="view_mode">list</field>
+        </record>
+
+    <record id="action_view_lab_id" model="ir.actions.act_window">
+        <field name="name">Lab Reports</field>
+        <field name="res_model">medical.lab</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="domain">[('patient_id', '=', active_id)]</field>
+    </record>
+
+        <menuitem name="Lab Tests Results" id="menu_lab_test_result"
+            parent="cno_lab_management.main_menu_laboratory" action="action_medical_lab_form"
+            sequence="0" />
+
+</odoo>

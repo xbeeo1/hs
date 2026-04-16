@@ -1,0 +1,14 @@
+# -*- coding: utf-8 -*-
+
+from odoo import api, fields, models
+
+
+
+class ProductTemplateInheritFRM(models.Model):
+    _inherit = 'product.template'
+
+    create_mrp_order = fields.Boolean(string="To Create MRP Order")
+    done_mrp_order = fields.Boolean(string="Done MRP Order")
+
+
+

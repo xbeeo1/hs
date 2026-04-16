@@ -1,0 +1,12 @@
+from . import res_users
+from . import purchase_order
+from . import purchase_order_line
+from . import sale_order_line
+from . import account_move_line
+from . import res_partner
+from . import farmer_village
+from . import crm_lead
+from . import stock_picking
+from . import vehicle_type
+
+

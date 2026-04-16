@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="outsourced_lab_request_tree_view" model="ir.ui.view">
+            <field name="name">outsourced.lab.request.tree.view</field>
+            <field name="model">outsourced.lab.request</field>
+            <field name="arch" type="xml">
+                <list create="false">
+                    <field name="name" />
+                    <field name="patient_id" />
+                    <field name="date_requested" />
+                    <field name="partner_lab_id" />
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+
+
+        <record id="outsourced_lab_request_form_view" model="ir.ui.view">
+            <field name="name">outsourced.lab.request.form.view</field>
+            <field name="model">outsourced.lab.request</field>
+            <field name="arch" type="xml">
+                <form string="Laboratory Test" create="false" >
+                    <header>
+                        <button name="action_sample_submitted" class="oe_highlight" invisible="state != 'draft'" string="Sample Submitted" type="object"/>
+                        <button name="action_reports_received" class="oe_highlight" invisible="state != 'sample_submitted'" string="Reports Received" type="object"/>
+                        <button name="action_delivered" class="oe_highlight" invisible="state != 'reports_received'" string="Delivered" type="object"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+
+                        <group string="Main Info">
+                            <group>
+                                <field name="name" readonly="1" />
+                                <field name="date_analysis" />
+                                <field name="partner_lab_id" />
+                                <field name="requestor_physician_id"
+                                    required="1" />
+                            </group>
+                            <group>
+                                <field name="patient_id" required="1" />
+                                <field name="date_requested" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Outsourced Lab Test Line" >
+                                <field name="outsourced_lab_test_lines" readonly="True">
+                                    <list string="Lab Test Line" >
+                                        <field name="medical_test_type_id" />
+
+                                    </list>
+                                </field>
+
+                            </page>
+
+                        </notebook>
+
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
+
+        <record id="action_outsourced_lab_request" model="ir.actions.act_window">
+            <field name="name">Outsourced Lab Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">outsourced.lab.request</field>
+            <field name="binding_view_types">form</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+
+        <menuitem name="Outsourced Lab Request" id="menu_outsourced_lab_request"
+            parent="menu_lab_requests" action="action_outsourced_lab_request"
+            sequence="2" />
+
+</odoo>

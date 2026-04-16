@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>                 
+        <menuitem 
+        	id="main_menu_Lab_management"
+        	name="Lab Management"
+            web_icon="cno_lab_management,static/description/icon.png"
+           />
+
+         <menuitem name="Configuration"
+            id="main_menu_configartion"
+            parent = "main_menu_Lab_management"
+            sequence = '13'
+            />
+            
+               
+    	<menuitem name="Laboratory"
+            id="main_menu_conf_laboratory"
+            parent = "main_menu_configartion"
+            sequence='0'
+           />
+    
+
+
+</openerp>

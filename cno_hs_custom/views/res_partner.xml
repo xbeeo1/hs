@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_partner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="seq_no" placeholder="seq_no"/>
+                <field name="is_farmer" />
+                <field name="cnic" placeholder="CNIC"/>
+            </xpath>
+            <xpath expr="//field[@name='city']" position="before">
+                <field name="village_id" placeholder="Village" required="1"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+
+
+</odoo>
