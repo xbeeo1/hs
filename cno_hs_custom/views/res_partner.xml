@@ -8,8 +8,9 @@
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='vat']" position="after">
-                <field name="reference" placeholder="reference"/>
+                <field name="farmer_ref" placeholder="Reference...."/>
                 <field name="is_farmer" />
+                <field name="is_doctor" />
                 <field name="cnic" placeholder="CNIC"/>
             </xpath>
             <xpath expr="//field[@name='city']" position="before">

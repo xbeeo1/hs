@@ -49,46 +49,54 @@ class StockPickingInherit(models.Model):
 
     def button_validate(self):
         for picking in self:
-            if picking.lab_request_count == 0:
-                raise ValidationError('Please add Lab Result')
-            missing = []
-            if not picking.vehicle_type_id:
-                missing.append("Vehicle Type")
-            if not picking.vehicle_number:
-                missing.append("Vehicle Number")
-            if not picking.driver_name:
-                missing.append("Driver Name")
-            if not picking.driver_ph_number:
-                missing.append("Driver Phone Number")
-            if not picking.driver_cnic:
-                missing.append("Driver CNIC")
-            if not picking.warehouse_id:
-                missing.append("Warehouse")
-            if not picking.total_bags:
-                missing.append("Total Bags")
-            if not picking.first_weight:
-                missing.append("First Weight")
-            if not picking.second_weight:
-                missing.append("Second Weight")
-            if not picking.net_weight:
-                missing.append("Net Weight")
-            if not picking.nunber:
-                missing.append("Number")
-            if not picking.e_number:
-                missing.append("E Number")
-            if not picking.date_in:
-                missing.append("Date In")
-            if not picking.date_out:
-                missing.append("Date Out")
-            if not picking.bag_type:
-                missing.append("Bag Type")
 
-            # Final check
-            if missing:
-                raise ValidationError(
-                    "Please fill all required fields before validation:\n- " +
-                    "\n- ".join(missing)
-                )
+            # Check if any product is custom
+            has_custom_product = any(
+                move.product_id.is_custom for move in picking.move_ids
+            )
+
+            # Run validation ONLY if custom product exists
+            if has_custom_product:
+                if picking.lab_request_count == 0:
+                    raise ValidationError('Please add Lab Result')
+                missing = []
+                if not picking.vehicle_type_id:
+                    missing.append("Vehicle Type")
+                if not picking.vehicle_number:
+                    missing.append("Vehicle Number")
+                if not picking.driver_name:
+                    missing.append("Driver Name")
+                if not picking.driver_ph_number:
+                    missing.append("Driver Phone Number")
+                if not picking.driver_cnic:
+                    missing.append("Driver CNIC")
+                if not picking.warehouse_id:
+                    missing.append("Warehouse")
+                if not picking.total_bags:
+                    missing.append("Total Bags")
+                if not picking.first_weight:
+                    missing.append("First Weight")
+                if not picking.second_weight:
+                    missing.append("Second Weight")
+                if not picking.net_weight:
+                    missing.append("Net Weight")
+                if not picking.nunber:
+                    missing.append("Number")
+                if not picking.e_number:
+                    missing.append("E Number")
+                if not picking.date_in:
+                    missing.append("Date In")
+                if not picking.date_out:
+                    missing.append("Date Out")
+                if not picking.bag_type:
+                    missing.append("Bag Type")
+
+                # Final check
+                if missing:
+                    raise ValidationError(
+                        "Please fill all required fields before validation:\n- " +
+                        "\n- ".join(missing)
+                    )
             for move in picking.move_ids:
                 po_line = move.purchase_line_id  # IMPORTANT LINK
                 if not po_line:

@@ -12,6 +12,12 @@ class CrmLeadInherit(models.Model):
     account_number = fields.Char(string='Account Number', required=True)
     sms_text = fields.Char(string='SMS Text', required=True)
     purchase_count = fields.Integer(string="Purchase Order", compute='_purchase_total')
+    bag_type = fields.Selection([('pp', 'PP'), ('Jute', 'Jute')])
+    no_bags = fields.Char(string='No. of Bags', required=True)
+    tokan_date = fields.Date(string = 'Date', required=True)
+    amount = fields.Float(string='Amount', required=True)
+    cdr_no = fields.Char(string='CDR No.')
+    cdr_status = fields.Selection([('pending','Pending'),('received','Received')], default='pending',string='CDR Status')
 
 
 
