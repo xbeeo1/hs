@@ -24,19 +24,44 @@
                                 <group>
                                     <field name="name" required="1" />
                                     <field name="code" />
+                                    <field name="type" />
+                                    <field name="auto_per_calculation" invisible = "type != 'lab_analysis'" />
+
                                 </group>
 
-                                <field name="critearea_ids" nolabel="1" widget="section_and_note_one2many">
-                                    <list  editable="bottom" string="Test Cases">
+                                <field name="critearea_ids" nolabel="1" widget="section_and_note_one2many" invisible="type != 'lab_analysis'">
+                                    <list  editable="bottom" string="lab Analysis" >
                                         <field name="seq" />
                                         <field name="name" />
                                         <field name="normal_range" />
+                                        <field name="limit_int" />
                                     </list>
                                     <form string="Test Cases">
                                         <field name="seq" />
                                         <field name="name" />
                                         <field name="normal_range" />
+                                        <field name="limit_int" />
                                     </form>
+
+                                </field>
+
+                                <field name="critearea_ids" nolabel="1"
+                                       widget="section_and_note_one2many"
+                                       invisible="type != 'random_quality_test'">
+
+                                    <list editable="bottom" string="Random Quality Test">
+                                        <field name="seq" />
+                                        <field name="bag_dhang"/>
+                                        <field name="no_of_bag_drawn"/>
+                                        <field name="weight_1"/>
+                                        <field name="weight_2"/>
+                                        <field name="weight_3"/>
+                                        <field name="weight_4"/>
+                                        <field name="avg_weight"/>
+                                        <field name="moisture_per"/>
+                                        <field name="trash_statust"/>
+
+                                    </list>
 
                                 </field>
 

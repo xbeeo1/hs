@@ -15,3 +15,6 @@ class medical_test_type(models.Model):
     critearea_ids = fields.One2many('medical_test.critearea', 'test_id','Critearea')
     service_product_id = fields.Many2one('product.product','Service' , required = True)
     info  = fields.Text('Extra Information')
+    auto_per_calculation = fields.Boolean('Auto % Calculation')
+    type = fields.Selection([('lab_analysis','lab Analysis'),('random_quality_test','Random Quality Test')], default='lab_analysis' , required=True)
+

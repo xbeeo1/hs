@@ -12,7 +12,12 @@ class medical_lab(models.Model):
  
 
     name = fields.Char(string="Name", readonly=True, default='/')
-    test_id = fields.Many2one('medical.test_type', 'Test Type', required = True)
+    test_id = fields.Many2one('medical.test_type', 'Test name', required = True)
+    type = fields.Selection(
+        related='test_id.type',
+        store=True,
+        readonly=True
+    )
     date_analysis =  fields.Datetime('Date of the Analysis' , default = datetime.now())
     patient_id = fields.Many2one('res.partner','Farmer', required = True)
     date_requested = fields.Datetime('Date requested',  default = datetime.now())
@@ -25,6 +30,10 @@ class medical_lab(models.Model):
     vehicle_number = fields.Char(string='Vehicle Number')
     tokan_no = fields.Char('Tokan No')
     sample_weight_gram = fields.Float(string='Sample Weight in Gram')
+    standard_bag_weight = fields.Float(string='Standard Bag Weight')
+
+
+    state = fields.Selection([('draft','Draft'),('approved','Approved'),('rejected','Rejected'),('cancelled','Cancelled')])
 
 
 

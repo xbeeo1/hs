@@ -16,7 +16,7 @@
                                 <field name="done_mrp_order" />
                             </group>
                             <group>
-
+                                <field name="is_custom" />
                             </group>
                         </group>
                     </page>

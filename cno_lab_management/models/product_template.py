@@ -9,6 +9,7 @@ class ProductTemplateInheritFRM(models.Model):
 
     create_mrp_order = fields.Boolean(string="To Create MRP Order")
     done_mrp_order = fields.Boolean(string="Done MRP Order")
+    is_custom = fields.Boolean(string='Is Custom')
 
 
 

@@ -23,7 +23,16 @@ class medical_test_critearea(models.Model):
     gram =  fields.Char('Gram')
     percentage =  fields.Char('Percentage')
     normal_range =  fields.Char('Limit')
+    limit_int = fields.Integer('Limit Integer')
     remark = fields.Text('Remarks')
+    bag_dhang = fields.Char('Bag Dhang')
+    no_of_bag_drawn = fields.Integer('No of Bags Drawn')
+    weight_1 = fields.Float('1st Weight')
+    weight_2 = fields.Float('2nd Weight')
+    weight_3 = fields.Float('3rd Weight')
+    weight_4 = fields.Float('4rd Weight')
+    avg_weight = fields.Float('Avg Weight')
+    moisture_per = fields.Float('Moisture%')
+    trash_statust = fields.Char('Trash Statust')
 
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:    
