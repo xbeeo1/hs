@@ -6,8 +6,7 @@ from odoo import models, fields, api, _
 class CrmLeadInherit(models.Model):
     _inherit = 'crm.lead'
 
-    reference = fields.Char(string='Order Reference', readonly=True,
-                            default="New")
+    reference = fields.Char('Reference', copy=False, readonly=True, default=lambda s: s.env._('New'))
     bank_name = fields.Many2one(comodel_name='res.bank', string='Bank Name', required=True)
     account_title = fields.Char(string='Account Title', required=True)
     account_number = fields.Char(string='Account Number', required=True)
@@ -37,11 +36,12 @@ class CrmLeadInherit(models.Model):
 
 
 
-    """CREATE CRM SEQUENCE NUMBER"""
-
-    def create(self, values):
-        values['reference'] = self.env['ir.sequence'].next_by_code('crm.lead') or ''
-        return super(CrmLeadInherit, self).create(values)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if not vals.get('reference') or vals['reference'] == _('New'):
+                vals['reference'] = self.env['ir.sequence'].next_by_code('crm.lead') or _('New')
+        return super().create(vals_list)
 
 
     def action_purchase_order_new(self):

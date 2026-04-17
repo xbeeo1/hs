@@ -4,7 +4,7 @@
 
         <record id="farmer_sequence_no" model="ir.sequence">
             <field name="name">Farmer Sequance Number</field>
-            <field name="code">farmer_seq_no</field>
+            <field name="code">farmer.seq.no</field>
             <field name="prefix">HS-</field>
             <field name="padding">5</field>
         </record>

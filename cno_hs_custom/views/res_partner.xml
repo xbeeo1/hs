@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='vat']" position="after">
-                <field name="seq_no" placeholder="seq_no"/>
+                <field name="reference" placeholder="reference"/>
                 <field name="is_farmer" />
                 <field name="cnic" placeholder="CNIC"/>
             </xpath>

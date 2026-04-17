@@ -1,4 +1,4 @@
-from odoo import models , api ,fields
+from odoo import models , api ,fields,_
 from odoo.exceptions import ValidationError
 
 class ResPartnerInherit(models.Model):
@@ -7,8 +7,13 @@ class ResPartnerInherit(models.Model):
     is_farmer = fields.Boolean(string="Is Farmer",required=True)
     cnic = fields.Char(string="CNIC",required=True)
     village_id = fields.Many2one("farmer.village", string="Village",required=True)
-    seq_no = fields.Char("Seq No.", default="New", readonly=True)
+    reference = fields.Char('Reference', copy=False, readonly=True, default=lambda s: s.env._('New'))
 
-    def create(self, values):
-        values['seq_no'] = self.env['ir.sequence'].next_by_code('farmer_seq_no') or ''
-        return super(ResPartnerInherit, self).create(values)
+
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if not vals.get('reference') or vals['reference'] == _('New'):
+                vals['reference'] = self.env['ir.sequence'].next_by_code('farmer.seq.no') or _('New')
+        return super().create(vals_list)
