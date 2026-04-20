@@ -8,8 +8,19 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                  <xpath expr="//button[@name='button_validate']" position="after">
-                      <button string="Create Lab Request" name="action_lab_request_new" type="object" class="oe_highlight" data-hotkey="q"/>
+                      <button string="Unloading" name="action_unloading" type="object" invisible="state != 'assigned'" class="oe_highlight" data-hotkey="q"/>
+                      <button string="Create Lab Request" name="action_lab_request_new" type="object" invisible="state != 'assigned' or picking_type_code != 'incoming'" class="oe_highlight" data-hotkey="q"/>
                   </xpath>
+                <xpath expr="(//button[@name='button_validate'])[1]" position="attributes">
+                    <attribute name="invisible">
+                        state != 'unloading'
+                    </attribute>
+                </xpath>
+                <xpath expr='(//field[@name="state"])[1]' position="attributes">
+                    <attribute name="statusbar_visible">
+                        draft,assigned,unloading,done
+                    </attribute>
+                </xpath>
                 <xpath expr="//button[@name='action_see_returns']" position="after">
                       <button name="action_view_lab_result" type="object" class="oe_stat_button"
                             icon="fa-list">
@@ -43,8 +54,8 @@
                              <group string="Weight Information" >
                                     <field name="total_bags" />
                                     <field name="first_weight" />
-                                     <field name="second_weight" />
-                                    <field name="net_weight" />
+                                     <field name="second_weight" invisible="state != 'unloading'"/>
+                                    <field name="net_weight" invisible="state != 'unloading'"/>
                             </group>
                         </group>
                         <group>
@@ -53,7 +64,7 @@
                                     <field name="nunber" />
                                      <field name="e_number" />
                                     <field name="date_in" />
-                                    <field name="date_out" />
+                                    <field name="date_out" invisible="state != 'unloading'"/>
                                     <field name="bag_type" />
                             </group>
                              <group>

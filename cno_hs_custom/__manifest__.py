@@ -28,7 +28,8 @@
         'views/farmer_village_views.xml',
         'views/crm_lead_views.xml',
         'views/stock_picking_views.xml',
-        'views/vehicle_type_views.xml'
+        'views/vehicle_type_views.xml',
+        'views/res_bank.xml'
     ],
 
 }

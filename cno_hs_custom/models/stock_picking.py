@@ -32,6 +32,16 @@ class StockPickingInherit(models.Model):
     bag_type = fields.Selection([('pp', 'PP'),('Jute', 'Jute')])
     lab_request_count = fields.Integer(string="Lab Request Count", compute='_lab_total')
 
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('waiting', 'Waiting Another Operation'),
+        ('confirmed', 'Waiting'),
+        ('assigned', 'Ready'),
+        ('unloading', 'Unloading'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled'),
+        ], string='Status', readonly=True, copy=False, index=True, tracking=True)
+
     @api.model
     def create(self, vals):
         picking = super().create(vals)
@@ -47,18 +57,22 @@ class StockPickingInherit(models.Model):
 
         return picking
 
-    def button_validate(self):
+    def action_unloading(self):
         for picking in self:
-
-            # Check if any product is custom
             has_custom_product = any(
                 move.product_id.is_custom for move in picking.move_ids
             )
 
             # Run validation ONLY if custom product exists
             if has_custom_product:
-                if picking.lab_request_count == 0:
-                    raise ValidationError('Please add Lab Result')
+                lab_analysis = self.env['medical.lab'].search_count(
+                    [('stock_picking_id', '=', picking.id), ('state', '=', 'approved'),('type','=','lab_analysis')])
+                if not lab_analysis:
+                    raise ValidationError('Please add Lab Analysis Result')
+                random_quality_test = self.env['medical.lab'].search_count(
+                    [('stock_picking_id', '=', picking.id), ('state', '=', 'approved'), ('type', '=', 'random_quality_test')])
+                if not random_quality_test:
+                    raise ValidationError('Please add Random Quality Test')
                 missing = []
                 if not picking.vehicle_type_id:
                     missing.append("Vehicle Type")
@@ -76,18 +90,12 @@ class StockPickingInherit(models.Model):
                     missing.append("Total Bags")
                 if not picking.first_weight:
                     missing.append("First Weight")
-                if not picking.second_weight:
-                    missing.append("Second Weight")
-                if not picking.net_weight:
-                    missing.append("Net Weight")
                 if not picking.nunber:
                     missing.append("Number")
                 if not picking.e_number:
                     missing.append("E Number")
                 if not picking.date_in:
                     missing.append("Date In")
-                if not picking.date_out:
-                    missing.append("Date Out")
                 if not picking.bag_type:
                     missing.append("Bag Type")
 
@@ -97,27 +105,54 @@ class StockPickingInherit(models.Model):
                         "Please fill all required fields before validation:\n- " +
                         "\n- ".join(missing)
                     )
-            for move in picking.move_ids:
-                po_line = move.purchase_line_id  # IMPORTANT LINK
-                if not po_line:
-                    continue
-                demand = po_line.product_qty
+        self.state = 'unloading'
 
-                # total done from all pickings
-                done_qty = sum(
-                    self.env['stock.move'].search([
-                        ('purchase_line_id', '=', po_line.id),
-                        ('state', '=', 'done')
-                    ]).mapped('quantity')
-                )
 
-                new_total = done_qty + move.quantity
+    def button_validate(self):
+        for picking in self:
+            has_custom_product = any(
+                move.product_id.is_custom for move in picking.move_ids
+            )
 
-                if new_total > demand:
+            # Run validation ONLY if custom product exists
+            if has_custom_product:
+                missing = []
+
+                if not picking.second_weight:
+                    missing.append("Second Weight")
+                if not picking.net_weight:
+                    missing.append("Net Weight")
+                if not picking.date_out:
+                    missing.append("Date Out")
+
+                if missing:
                     raise ValidationError(
-                        f"Demand exceeded for {po_line.product_id.display_name}\n"
-                        f"Allowed: {demand}, Already Done: {done_qty}, Trying: {move.quantity}"
+                        "Please fill all required fields before validation:\n- " +
+                        "\n- ".join(missing)
                     )
+
+
+                for move in picking.move_ids:
+                    po_line = move.purchase_line_id  # IMPORTANT LINK
+                    if not po_line:
+                        continue
+                    demand = po_line.product_qty
+
+                    # total done from all pickings
+                    done_qty = sum(
+                        self.env['stock.move'].search([
+                            ('purchase_line_id', '=', po_line.id),
+                            ('state', '=', 'done')
+                        ]).mapped('quantity')
+                    )
+
+                    new_total = done_qty + move.quantity
+
+                    if new_total > demand:
+                        raise ValidationError(
+                            f"Demand exceeded for {po_line.product_id.display_name}\n"
+                            f"Allowed: {demand}, Already Done: {done_qty}, Trying: {move.quantity}"
+                        )
 
         return super().button_validate()
 
@@ -143,7 +178,7 @@ class StockPickingInherit(models.Model):
     def _lab_total(self):
         for rec in self:
             lab_count = rec.env['medical.lab'].search_count(
-                [('stock_picking_id', '=', rec.id)])
+                [('stock_picking_id', '=', rec.id),('state', '=', 'approved')])
             rec.lab_request_count = lab_count
 
     def action_view_lab_result(self):
@@ -153,6 +188,6 @@ class StockPickingInherit(models.Model):
             "res_model": "medical.lab",
             "name": _("Lab Result"),
             'view_mode': 'list,form',
-            'domain': [('stock_picking_id', '=', self.id)],
+            'domain': [('stock_picking_id', '=', self.id),('state', '=', 'approved')],
         }
         return result

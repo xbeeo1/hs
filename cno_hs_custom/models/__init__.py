@@ -8,5 +8,6 @@ from . import farmer_village
 from . import crm_lead
 from . import stock_picking
 from . import vehicle_type
+from . import res_bank
 
 
