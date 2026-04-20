@@ -16,9 +16,26 @@
                             </group>
                             <group>
                                    <field name="is_custom" />
+                                   <field name="bardana_weight" />
+                                   <field name="filled_bardana_weight" />
                             </group>
                         </group>
                     </page>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="product_product_stock_tree_view_inherit" model="ir.ui.view">
+            <field name="name">product.product.stock.tree.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock.product_product_stock_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='qty_available']" position="after">
+                    <field name="bardana_weight"  readonly="1"/>
+                    <field name="filled_bardana_weight"  readonly="1"/>
+                    <field name="total_bardana_weight"  readonly="1"/>
+                    <field name="net_grain_weight"  readonly="1"/>
                 </xpath>
 
             </field>

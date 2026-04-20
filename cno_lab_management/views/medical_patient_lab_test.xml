@@ -50,7 +50,9 @@
                                     options="{&quot;always_reload&quot;: 1}" />
                                 <field name="doctor_id" />
                                 <field name="tokan_no" />
-                                <field name="sample_weight_gram" />
+                                <field name="sample_weight_gram" invisible="type != 'lab_analysis'"/>
+                                <field name="standard_bag_weight" invisible="type != 'random_quality_test'"/>
+                                <field name="type" invisible = '1'/>
                             </group>
                         </group>
                         <notebook>

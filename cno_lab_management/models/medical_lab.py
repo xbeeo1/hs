@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
+from jinja2 import defaults
 
 from odoo import api, fields, models, _
 from datetime import date,datetime
@@ -33,9 +34,19 @@ class medical_lab(models.Model):
     standard_bag_weight = fields.Float(string='Standard Bag Weight')
 
 
-    state = fields.Selection([('draft','Draft'),('approved','Approved'),('rejected','Rejected'),('cancelled','Cancelled')])
+    state = fields.Selection([('draft','Draft'),('approved','Approved'),('rejected','Rejected'),('cancelled','Cancelled')],default='draft')
 
 
+
+
+    def action_approved(self):
+        self.state = 'approved'
+
+    def action_rejected(self):
+        self.state = 'rejected'
+
+    def action_cancelled(self):
+        self.state = 'cancelled'
 
     @api.model_create_multi
     def create(self, vals_list):

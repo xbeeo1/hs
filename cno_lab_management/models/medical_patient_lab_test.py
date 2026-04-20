@@ -18,6 +18,11 @@ class medical_patient_lab_test(models.Model):
 	owner_partner_id = fields.Many2one('res.partner')
 	state = fields.Selection([('draft', 'Draft'),('tested', 'Tested'), ('cancel', 'Cancel')], readonly= True, default = 'draft')
 	medical_test_type_id = fields.Many2one('medical.test_type', 'Test Type',required = False)
+	type = fields.Selection(
+		related='medical_test_type_id.type',
+		store=True,
+		readonly=True
+	)
 	patient_id = fields.Many2one('res.partner','Farmer' )
 	doctor_id = fields.Many2one('res.partner','Doctor',required=True)
 	lab_test_lines = fields.One2many('medical.patient.lab.test.line', 'lab_test_id',
@@ -27,7 +32,7 @@ class medical_patient_lab_test(models.Model):
 	tokan_no = fields.Char('Tokan No')
 	sample_weight_gram = fields.Float(string='Sample Weight in Gram')
 	stock_picking_id = fields.Many2one('stock.picking','Stock Picking')
-
+	standard_bag_weight = fields.Float(string='Standard Bag Weight')
 	outsourced_lab_request = fields.Boolean(string="Outsourced Lab Request")
 
 	partner_lab_id = fields.Many2one(comodel_name='partner.lab', string="Partner Lab")

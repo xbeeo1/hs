@@ -11,12 +11,18 @@
                 <xpath expr="//notebook/page[last()]" position="after">
                     <page name="custom_fields" string="Custom Fields">
                         <group>
-                            <group>
+                            <group string="For Lab test">
                                 <field name="create_mrp_order" />
                                 <field name="done_mrp_order" />
                             </group>
                             <group>
-                                <field name="is_custom" />
+                                <group string="For Custom Receipt">
+                                    <field name="is_custom" />
+                                </group>
+                                <group string="For Stock Report">
+                                    <field name="bardana_weight" />
+                                    <field name="filled_bardana_weight" />
+                                </group>
                             </group>
                         </group>
                     </page>

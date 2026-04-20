@@ -23,6 +23,10 @@
                 <form string="Laboratory Test" create="false">
                     <sheet>
                         <header>
+                            <button name="action_approved" class="oe_highlight" invisible="state != 'draft'" string="Approved" type="object"/>
+                            <button name="action_rejected" class="oe_highlight" invisible="state != 'draft'" string="Rejected" type="object"/>
+                            <button name="action_cancelled" class="oe_highlight" invisible="state != 'approved'" string="Cancelled" type="object"/>
+
                             <field name="state" widget="statusbar"/>
                         </header>
 
@@ -48,12 +52,13 @@
                         <notebook> 
                             <page string = "Total Cases">  
                                 <field name="critearea_ids" widget="section_and_note_one2many" invisible="type != 'lab_analysis'" nolabel="1">
-                                    <list editable="top" string="Test Cases">
-                                        <field name="seq" />
-                                        <field name="name" />
-                                        <field name="normal_range" />
+                                    <list editable="top" string="Test Cases" decoration-danger="is_below_limit">
+                                        <field name="seq" readonly="1"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="normal_range"  readonly="1"/>
                                         <field name="gram" />
                                         <field name="percentage" />
+                                        <field name="is_below_limit" column_invisible="True" />
                                     </list>
 
                                     <form string="Test Cases">
@@ -69,7 +74,7 @@
                                        widget="section_and_note_one2many"
                                        invisible="type != 'random_quality_test'">
 
-                                    <list editable="bottom" string="Random Quality Test">
+                                    <list editable="bottom" string="Random Quality Test" decoration-danger="is_avg_weight">
                                         <field name="seq" />
                                         <field name="bag_dhang"/>
                                         <field name="no_of_bag_drawn"/>
@@ -80,6 +85,8 @@
                                         <field name="avg_weight"/>
                                         <field name="moisture_per"/>
                                         <field name="trash_statust"/>
+                                        <field name="is_avg_weight" column_invisible="True"/>
+
 
                                     </list>
 

@@ -25,8 +25,22 @@ class medical_lab_test_create(models.TransientModel):
                                            'stock_picking_id': browse_record.stock_picking_id.id or None,
                                            'vehicle_number': browse_record.vehicle_number or '',
                                            'tokan_no': browse_record.tokan_no or '',
-                                           'gate_pass_no': browse_record.gate_pass_no or ''
+                                           'gate_pass_no': browse_record.gate_pass_no or '',
+                                            'sample_weight_gram': browse_record.sample_weight_gram or '',
+                                            'standard_bag_weight': browse_record.standard_bag_weight or ''
                                            })
+                critearea_lines = [(5, 0, 0)]
+                for cri in browse_record.medical_test_type_id.critearea_ids:
+                    critearea_line_vals = {
+                        'seq': cri.seq or '',
+                        'name': cri.name or '',
+                        'normal_range': cri.normal_range,
+                        'limit_int': cri.limit_int,
+                        'lab_test_unit_id': cri.lab_test_unit_id.id,
+                    }
+                    critearea_lines.append((0, 0, critearea_line_vals))
+
+                res1 = res.write({'critearea_ids': critearea_lines})
                 res_ids.append(res.id)
                 if res_ids:
                     imd = self.env['ir.model.data']
@@ -60,7 +74,9 @@ class medical_lab_test_create(models.TransientModel):
                                               'stock_picking_id': browse_record.stock_picking_id.id or None,
                                               'vehicle_number': browse_record.vehicle_number or '',
                                               'tokan_no': browse_record.tokan_no or '',
-                                              'gate_pass_no': browse_record.gate_pass_no or ''
+                                              'gate_pass_no': browse_record.gate_pass_no or '',
+                                              'sample_weight_gram': browse_record.sample_weight_gram or '',
+                                              'standard_bag_weight': browse_record.standard_bag_weight or ''
                                               })
                 critearea_lines = [(5, 0, 0)]
                 for line in browse_record.lab_test_lines:
