@@ -3,6 +3,8 @@
 from odoo import models, fields, api, _
 from datetime import date, datetime, timedelta
 from odoo.exceptions import UserError ,ValidationError
+from odoo.orm.decorators import readonly
+
 
 class StockPickingInherit(models.Model):
     _inherit = 'stock.picking'
@@ -20,7 +22,9 @@ class StockPickingInherit(models.Model):
     driver_ph_number = fields.Char(string='Driver Phone Number')
     driver_cnic = fields.Char(string='Driver CNIC')
     driver_image = fields.Binary(string='Driver Image')
-    warehouse_id = fields.Many2one(comodel_name='stock.warehouse', string='Warehouse')
+    driver_cnic_front = fields.Binary(string='Driver CNIC Front')
+    driver_cnic_back = fields.Binary(string='Driver CNIC Back')
+    warehouse_id = fields.Many2one(comodel_name='stock.location', string='Warehouse')
     total_bags = fields.Integer(string='Total Bags')
     first_weight = fields.Float(string='First Weight')
     second_weight = fields.Float(string='Second Weight')
@@ -29,7 +33,7 @@ class StockPickingInherit(models.Model):
     e_number = fields.Char(string='E Number')
     date_in = fields.Datetime(string='Date In')
     date_out = fields.Datetime(string='Date Out')
-    bag_type = fields.Selection([('pp', 'PP'),('Jute', 'Jute')])
+    bag_type = fields.Selection([('pp', 'PP'),('Jute', 'Jute')], readonly=True)
     lab_request_count = fields.Integer(string="Lab Request Count", compute='_lab_total')
 
     state = fields.Selection([
@@ -41,6 +45,41 @@ class StockPickingInherit(models.Model):
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
         ], string='Status', readonly=True, copy=False, index=True, tracking=True)
+
+
+    @api.onchange('warehouse_id')
+    def onchange_warehouse_id(self):
+        for x in self:
+            x.location_dest_id = x.warehouse_id.id
+
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        # 🔥 Reset your custom fields
+        default.update({
+            'vehicle_type_id': False,
+            'vehicle_number': False,
+            'vehicle_image': False,
+            'driver_name': False,
+            'driver_ph_number': False,
+            'driver_cnic': False,
+            'driver_image': False,
+            'driver_cnic_front': False,
+            'driver_cnic_back': False,
+            'warehouse_id': False,
+            'total_bags': 0,
+            'first_weight': 0.0,
+            'second_weight': 0.0,
+            'net_weight': 0.0,
+            'nunber': False,
+            'e_number': False,
+            'date_in': False,
+            'date_out': False
+        })
+
+        return super().copy(default)
+
+
 
     @api.model
     def create(self, vals):
@@ -54,6 +93,8 @@ class StockPickingInherit(models.Model):
                 picking.account_number = purchase_order.account_number
                 picking.sms_text = purchase_order.sms_text
                 picking.reference = purchase_order.reference
+                picking.bag_type = purchase_order.crm_lead_id.bag_type
+
 
         return picking
 

@@ -48,19 +48,20 @@
             </xpath>
 
             <xpath expr="//notebook/page[last()]" position="after">
-                <page name="custom_fields" string="Custom Fields">
+                <page name="custom_fields" string="Wheat Fields" groups="cno_hs_custom.group_wheat_menu_access">
                     <group >
                         <group string="Farmer Information" >
                             <field name="bank_name" />
                             <field name="account_title" />
                             <field name="account_number" />
-                            <field name="sms_text" />
                             <field name="cdr_no" />
                             <field name="cdr_status" />
                         </group>
                         <group string="Tokan Information" >
+                             <field name="no_of_acers" />
                              <field name="bag_type" />
                             <field name="no_bags" />
+                            <field name="grain_weight" />
                             <field name="tokan_date" />
                             <field name="amount" />
                         </group>
@@ -90,6 +91,17 @@
               </xpath>
           </field>
       </record>
+
+      <record id="crm.crm_lead_action_pipeline" model="ir.actions.act_window">
+            <field name="view_mode">list,kanban,graph,pivot,form,calendar,activity</field>
+        </record>
+      <record id="crm.crm_lead_action_pipeline_view_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+        </record>
+
+        <record id="crm.crm_lead_action_pipeline_view_kanban" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+        </record>
 
   </data>
 </odoo>

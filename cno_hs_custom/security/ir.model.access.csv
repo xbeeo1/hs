@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_farmer_village,farmer.village,model_farmer_village,base.group_user,1,1,1,1
 access_vehicle_type,vehicle.type,model_vehicle_type,base.group_user,1,1,1,1
+access_sms_text,sms.text,model_sms_text,base.group_user,1,1,1,1
+access_grain_product,grain.product,model_grain_product,base.group_user,1,1,1,1

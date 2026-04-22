@@ -19,6 +19,7 @@
 
     "data": [
         'security/ir.model.access.csv',
+        'security/security.xml',
         'data/ir_sequence_data.xml',
         'views/res_users_views.xml',
         'views/purchase_order_views.xml',
@@ -29,6 +30,8 @@
         'views/crm_lead_views.xml',
         'views/stock_picking_views.xml',
         'views/vehicle_type_views.xml',
+        'views/sms_text_views.xml',
+        'views/grain_product_views.xml',
         'views/res_bank.xml'
     ],
 

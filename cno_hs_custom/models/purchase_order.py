@@ -12,5 +12,5 @@ class PurchaseOrderInherit(models.Model):
     crm_lead_id = fields.Many2one(comodel_name='crm.lead', string='CRM Lead', readonly=True)
     account_title = fields.Char(string='Account Title', readonly=True)
     account_number = fields.Char(string='Account Number', readonly=True)
-    sms_text = fields.Char(string='SMS Text', readonly=True)
+    sms_text = fields.Char(string='SMS Text')
     reference = fields.Char(string='Tokan No', readonly=True)

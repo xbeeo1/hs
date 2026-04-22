@@ -28,20 +28,21 @@
                     </button>
                   </xpath>
                 <xpath expr="//notebook/page[last()]" position="after">
-                    <page name="custom_fields" string="Custom Fields">
+                    <page name="custom_fields" string="Wheat Fields" groups="cno_hs_custom.group_wheat_menu_access">
                         <group>
                             <group string="Farmer Information" >
                                     <field name="bank_name" />
                                     <field name="account_title" />
                                     <field name="reference" />
                                      <field name="account_number" />
-                                    <field name="sms_text" />
                             </group>
                             <group string="Driver Information" >
                                     <field name="driver_name" />
                                     <field name="driver_ph_number" />
                                      <field name="driver_cnic" />
                                     <field name="driver_image" />
+                                    <field name="driver_cnic_front" />
+                                    <field name="driver_cnic_back" />
                             </group>
                         </group>
                         <group>

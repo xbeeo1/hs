@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sms_text_list" model="ir.ui.view">
+            <field name="name">sms.text.list</field>
+            <field name="model">sms.text</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record id="view_sms_text_form" model="ir.ui.view">
+            <field name="name">sms.text.form</field>
+            <field name="model">sms.text</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+
+                        <group>
+                            <field name="name"/>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sms_text" model="ir.actions.act_window">
+            <field name="name">SMS Text</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sms.text</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Your First SMS Text...!
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_action_sms_text"
+                  name="SMS Text"
+                  parent="crm.crm_menu_config"
+                  action="action_sms_text"
+                  sequence="6"/>
+
+    </data>
+</odoo>

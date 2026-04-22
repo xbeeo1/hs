@@ -9,5 +9,7 @@ from . import crm_lead
 from . import stock_picking
 from . import vehicle_type
 from . import res_bank
+from . import sms_text
+from . import grain_product
 
 

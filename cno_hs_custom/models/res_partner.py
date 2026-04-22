@@ -7,6 +7,8 @@ class ResPartnerInherit(models.Model):
     is_farmer = fields.Boolean(string="Is Farmer")
     is_doctor = fields.Boolean(string="Is Doctor")
     cnic = fields.Char(string="CNIC",required=True)
+    cnic_expiry_date = fields.Date(string="CNIC Expiry Date",required=True)
+    date_of_birth = fields.Date(string="Date of Birth",required=True)
     village_id = fields.Many2one("farmer.village", string="Village",required=True)
     farmer_ref = fields.Char('Farmer Reference', copy=False, readonly=True, default=lambda s: s.env._('New'))
 

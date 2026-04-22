@@ -12,6 +12,8 @@
                 <field name="is_farmer" />
                 <field name="is_doctor" />
                 <field name="cnic" placeholder="CNIC"/>
+                <field name="cnic_expiry_date" />
+                <field name="date_of_birth" />
             </xpath>
             <xpath expr="//field[@name='city']" position="before">
                 <field name="village_id" placeholder="Village" required="1"/>
