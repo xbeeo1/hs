@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='vat']" position="after">
+                <field name="whatsapp_num" />
                 <field name="farmer_ref" placeholder="Reference...."/>
                 <field name="is_farmer" />
                 <field name="is_doctor" />
@@ -17,6 +18,11 @@
             </xpath>
             <xpath expr="//field[@name='city']" position="before">
                 <field name="village_id" placeholder="Village" required="1"/>
+                <div class="o_address_format">
+                    <field name="division" placeholder="Division" class="o_address_city"/>
+                    <field name="district" placeholder="District" class="o_address_state"/>
+                    <field name="tehsil" placeholder="Tehsil" class="o_address_zip"/>
+                </div>
             </xpath>
 
         </field>

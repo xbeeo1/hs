@@ -12,6 +12,9 @@
                             <group>
                                 <field name="allowed_product_catg_id" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit': True,'no_open': True, 'no_create': True}"/>
                             </group>
+                            <group>
+                                <field name="allowed_warehouse_id" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit': True,'no_open': True, 'no_create': True}"/>
+                            </group>
                         </group>
                     </page>
                 </xpath>

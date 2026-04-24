@@ -12,6 +12,18 @@
                     <button name="action_create_invoice" invisible="state != 'purchase'" string="Create Bill" type="object"/>
                 </xpath>
 
+                <xpath expr="//button[@name='action_purchase_comparison']" position="replace"/>
+
+
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="whatsapp_num" />
+                </xpath>
+
+                <xpath expr="//field[@name='picking_type_id']" position="after">
+                    <field name="per_maund" />
+                </xpath>
+
+
                 <xpath expr="//notebook/page[@name='purchase_delivery_invoice']" position="after">
                     <page name="custom_fields" string="Wheat Fields" groups="cno_hs_custom.group_wheat_menu_access">
                         <group string="Farmer Information" >
@@ -33,6 +45,21 @@
                     <attribute name="domain">
                         [('categ_id', 'in', allowed_category_ids)]
                     </attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="purchase_order_stock_view_form_inherit_hs" model="ir.ui.view">
+            <field name="name">purchase.order.stock.from.inherit.hs</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase_stock.purchase_order_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_picking']" position="attributes">
+                    <attribute name="invisible">is_shipped or state != 'purchase' or incoming_picking_count == 0 or not receipt_button_visible</attribute>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_button_box')]/button[@name='action_view_picking']" position="attributes">
+                        <attribute name="invisible">incoming_picking_count == 0 or not receipt_button_visible</attribute>
                 </xpath>
             </field>
         </record>

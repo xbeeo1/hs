@@ -5,7 +5,11 @@ class ResPartnerInherit(models.Model):
     _inherit = "res.partner"
 
     is_farmer = fields.Boolean(string="Is Farmer")
-    is_doctor = fields.Boolean(string="Is Doctor")
+    is_doctor = fields.Boolean(string="Lab Analyst")
+    whatsapp_num = fields.Char(string='WhatsApp Number')
+    division = fields.Char(string='Divisions')
+    district = fields.Char(string='District')
+    tehsil = fields.Char(string='tehsil')
     cnic = fields.Char(string="CNIC",required=True)
     cnic_expiry_date = fields.Date(string="CNIC Expiry Date",required=True)
     date_of_birth = fields.Date(string="Date of Birth",required=True)

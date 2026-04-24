@@ -4,6 +4,7 @@ from odoo import models, fields, api, _
 from datetime import date, datetime, timedelta
 from odoo.exceptions import UserError ,ValidationError
 from odoo.orm.decorators import readonly
+from lxml import etree
 
 
 class StockPickingInherit(models.Model):
@@ -24,12 +25,13 @@ class StockPickingInherit(models.Model):
     driver_image = fields.Binary(string='Driver Image')
     driver_cnic_front = fields.Binary(string='Driver CNIC Front')
     driver_cnic_back = fields.Binary(string='Driver CNIC Back')
-    warehouse_id = fields.Many2one(comodel_name='stock.location', string='Warehouse')
+    warehouse_id = fields.Many2one(comodel_name='stock.warehouse', string='Warehouse')
+    cust_location_id = fields.Many2one(comodel_name='stock.location', string='Location',domain="[('warehouse_id', '=', warehouse_id),('usage', '=', 'internal')]")
     total_bags = fields.Integer(string='Total Bags')
     first_weight = fields.Float(string='First Weight')
     second_weight = fields.Float(string='Second Weight')
     net_weight = fields.Float(string='Net Weight')
-    nunber = fields.Char(string='Number')
+    nunber = fields.Char(string='Gate pass')
     e_number = fields.Char(string='E Number')
     date_in = fields.Datetime(string='Date In')
     date_out = fields.Datetime(string='Date Out')
@@ -46,11 +48,19 @@ class StockPickingInherit(models.Model):
         ('cancel', 'Cancelled'),
         ], string='Status', readonly=True, copy=False, index=True, tracking=True)
 
+    allowed_warehouse_ids = fields.Many2many(
+        'stock.warehouse',
+        compute='_compute_allowed_warehouse'
+    )
 
-    @api.onchange('warehouse_id')
+    def _compute_allowed_warehouse(self):
+        for rec in self:
+            rec.allowed_warehouse_ids = self.env.user.allowed_warehouse_id
+
+    @api.onchange('cust_location_id')
     def onchange_warehouse_id(self):
         for x in self:
-            x.location_dest_id = x.warehouse_id.id
+            x.location_dest_id = x.cust_location_id.id
 
     def copy(self, default=None):
         default = dict(default or {})
@@ -66,13 +76,13 @@ class StockPickingInherit(models.Model):
             'driver_image': False,
             'driver_cnic_front': False,
             'driver_cnic_back': False,
+            'cust_location_id': False,
             'warehouse_id': False,
             'total_bags': 0,
             'first_weight': 0.0,
             'second_weight': 0.0,
             'net_weight': 0.0,
             'nunber': False,
-            'e_number': False,
             'date_in': False,
             'date_out': False
         })
@@ -125,8 +135,11 @@ class StockPickingInherit(models.Model):
                     missing.append("Driver Phone Number")
                 if not picking.driver_cnic:
                     missing.append("Driver CNIC")
+                if not picking.cust_location_id:
+                    missing.append("Location")
                 if not picking.warehouse_id:
                     missing.append("Warehouse")
+
                 if not picking.total_bags:
                     missing.append("Total Bags")
                 if not picking.first_weight:
@@ -232,3 +245,67 @@ class StockPickingInherit(models.Model):
             'domain': [('stock_picking_id', '=', self.id),('state', '=', 'approved')],
         }
         return result
+
+    api.model
+
+    def get_view(self, view_id=None, view_type='form', **options):
+        self.check_access_rights('read')
+        result = dict(self._get_view_cache(view_id, view_type, **options))
+        node = etree.fromstring(result['arch'])
+
+        if self.env.user.has_group('cno_hs_custom.group_weighing_access') or self.env.user.has_group('cno_hs_custom.group_sampling_access'):
+            # Form readonly
+            node.set('create', '0')
+            node.set('delete', '0')
+
+            fields_to_disable = [
+                'partner_id', 'location_dest_id', 'picking_type_id', 'owner_id',
+                'scheduled_date', 'date_deadline', 'origin']
+            for field_name in fields_to_disable:
+                for field in node.xpath(f"//field[@name='{field_name}']"):
+                    field.set('readonly', '1')
+                    old_options = field.get('options')
+                    if old_options:
+                        try:
+                            options_dict = json.loads(old_options.replace("'", '"'))
+                        except:
+                            options_dict = {}
+                        options_dict['no_open'] = True
+                        field.set('options', str(options_dict))
+                    else:
+                        field.set('options', "{'no_open': True}")
+            return_action_id = self.env.ref('stock.act_stock_return_picking').id
+            report_action_id = self.env.ref('stock.action_report_delivery').id
+            button_to_disable = ['action_lab_request_new', 'action_unloading', 'do_print_picking',
+                                 'action_cancel', 'action_view_lab_result', 'action_detailed_operations',
+                                 'action_open_picking_client_action','action_see_packages'
+                                 ]
+
+            for button_name in button_to_disable:
+                for button in node.xpath(f"//button[@name='{button_name}']"):
+                    button.set('invisible', '1')
+
+            for page in node.xpath("//page[@name='extra']"):
+                page.set('invisible', '1')
+
+            for button in node.xpath(f"//button[@name='{return_action_id}']"):
+                button.set('invisible', '1')
+
+            for button in node.xpath(f"//button[@name='{report_action_id}']"):
+                button.set('invisible', '1')
+
+            if self.env.user.has_group('cno_hs_custom.group_sampling_access'):
+                node.set('edit', '0')
+
+                button_to_disable = ['action_lab_request_new','action_view_lab_result']
+
+                for button_name in button_to_disable:
+                    for button in node.xpath(f"//button[@name='{button_name}']"):
+                        button.set('invisible', '0')
+
+
+
+        result['arch'] = etree.tostring(node, encoding="unicode")
+        return result
+
+

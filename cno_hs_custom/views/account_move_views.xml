@@ -12,6 +12,10 @@
                     </attribute>
             </xpath>
 
+            <xpath expr="//field[@name='invoice_line_ids']//list//field[@name='account_id']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+
         </field>
     </record>
 

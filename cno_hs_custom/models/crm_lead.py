@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from openpyxl.worksheet import related
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
@@ -16,11 +17,13 @@ class CrmLeadInherit(models.Model):
     bag_type = fields.Selection([('pp', 'PP'), ('Jute', 'Jute')], default='pp',required=True)
     no_bags = fields.Integer(string='No. of Bags', compute='_no_bags',store=True)
     tokan_date = fields.Date(string = 'Date', required=True)
-    amount = fields.Float(string='Amount', required=True)
+    amount = fields.Float(string='CDR Amount', required=True)
     cdr_no = fields.Char(string='CDR No.')
     no_of_acers = fields.Float(string='No. of Acers',required=True)
     grain_weight = fields.Float(string='Grain Weight', compute='_grain_weight',store=True)
     cdr_status = fields.Selection([('pending','Pending'),('received','Received')], default='pending',string='CDR Status')
+    tokan_number = fields.Char(string='Tokan Number',required=True)
+    whatsapp_num = fields.Char(string='WhatsApp Number', related="partner_id.whatsapp_num",readonly=True )
 
     @api.depends('no_of_acers', 'bag_type')
     def _no_bags(self):
@@ -81,12 +84,12 @@ class CrmLeadInherit(models.Model):
 
 
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            if not vals.get('reference') or vals['reference'] == _('New'):
-                vals['reference'] = self.env['ir.sequence'].next_by_code('crm.lead') or _('New')
-        return super().create(vals_list)
+    # @api.model_create_multi
+    # def create(self, vals_list):
+    #     for vals in vals_list:
+    #         if not vals.get('reference') or vals['reference'] == _('New'):
+    #             vals['reference'] = self.env['ir.sequence'].next_by_code('crm.lead') or _('New')
+    #     return super().create(vals_list)
 
 
     def action_purchase_order_new(self):
@@ -118,7 +121,7 @@ class CrmLeadInherit(models.Model):
                 'default_account_title': self.account_title,
                 'default_account_number': self.account_number,
                 'default_sms_text': self.sms_text,
-                'default_reference': self.reference,
+                'default_reference': self.tokan_number,
                 'default_crm_lead_id': self.id,
 
                 'default_order_line': order_lines,

@@ -32,7 +32,10 @@
         'views/vehicle_type_views.xml',
         'views/sms_text_views.xml',
         'views/grain_product_views.xml',
-        'views/res_bank.xml'
+        'views/res_bank.xml',
+        'views/account_payment_views.xml',
+        'wizard/account_payemnt_register_wizard_view.xml',
+
     ],
 
 }

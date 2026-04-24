@@ -12,8 +12,16 @@ class ResUsers(models.Model):
         help='Allowed Product Catg for this user'
     )
 
+    allowed_warehouse_id = fields.Many2many(
+        comodel_name='stock.warehouse',
+        string='Allowed Warehouse',
+        help='Allowed Warehouse for this user'
+    )
+
     def write(self, values):
-        res = super(ResUsers, self).write(values)
-        if self.ids and 'allowed_product_catg_id' in values:
+        res = super().write(values)
+        fields_to_check = ['allowed_product_catg_id', 'allowed_warehouse_id']
+
+        if self.ids and any(field in values for field in fields_to_check):
             self.env.registry.clear_cache()
         return res

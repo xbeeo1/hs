@@ -8,7 +8,7 @@
           <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
           <field name="arch" type="xml">
               <xpath expr="//field[@name='name']" position="before">
-                  <field name="reference"/>
+                  <field name="tokan_number"/>
               </xpath>
 
           </field>
@@ -22,11 +22,18 @@
         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
 
-            <xpath expr="//div[contains(@class, 'oe_button_box')]" position="after">
-                <div class="oe_title">
-                    <h1>
-                        <field name="reference" readonly="1"/>
-                    </h1>
+<!--            <xpath expr="//div[contains(@class, 'oe_button_box')]" position="after">-->
+<!--                <div class="oe_title">-->
+<!--                    <h1>-->
+<!--                        <field name="reference" readonly="1"/>-->
+<!--                    </h1>-->
+<!--                </div>-->
+<!--            </xpath>-->
+
+            <xpath expr="//label[@for='phone']" position="before">
+                <label for="whatsapp_num" class="oe_inline"/>
+                <div>
+                    <field name="whatsapp_num"/>
                 </div>
             </xpath>
             <xpath expr="//button[@name='action_schedule_meeting']" position="replace"/>
@@ -58,6 +65,7 @@
                             <field name="cdr_status" />
                         </group>
                         <group string="Tokan Information" >
+                             <field name="tokan_number" />
                              <field name="no_of_acers" />
                              <field name="bag_type" />
                             <field name="no_bags" />
@@ -102,6 +110,31 @@
         <record id="crm.crm_lead_action_pipeline_view_kanban" model="ir.actions.act_window.view">
             <field name="sequence" eval="1"/>
         </record>
+
+
+      <record id="view_crm_case_opportunities_filter_inherit" model="ir.ui.view">
+          <field name="name">crm.lead.search.inherit</field>
+          <field name="model">crm.lead</field>
+          <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='name']" position="before">
+                  <field name="tokan_number"/>
+              </xpath>
+
+              <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="filter_domain">
+                        [
+                            '|','|','|','|',
+                            ('partner_id', 'ilike', self),
+                            ('partner_name', 'ilike', self),
+                            ('email_from', 'ilike', self),
+                            ('contact_name', 'ilike', self),
+                            ('partner_id.cnic', 'ilike', self)
+                        ]
+                    </attribute>
+                </xpath>
+          </field>
+      </record>
 
   </data>
 </odoo>
