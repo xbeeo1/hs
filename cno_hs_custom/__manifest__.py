@@ -37,5 +37,10 @@
         'wizard/account_payemnt_register_wizard_view.xml',
 
     ],
+    'assets': {
+        'web.assets_backend': [
+             'cno_hs_custom/static/src/views/**/*',
+        ],
+    },
 
 }

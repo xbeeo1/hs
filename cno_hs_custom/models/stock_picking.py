@@ -5,6 +5,8 @@ from datetime import date, datetime, timedelta
 from odoo.exceptions import UserError ,ValidationError
 from odoo.orm.decorators import readonly
 from lxml import etree
+import base64
+import requests
 
 
 class StockPickingInherit(models.Model):
@@ -37,6 +39,11 @@ class StockPickingInherit(models.Model):
     date_out = fields.Datetime(string='Date Out')
     bag_type = fields.Selection([('pp', 'PP'),('Jute', 'Jute')], readonly=True)
     lab_request_count = fields.Integer(string="Lab Request Count", compute='_lab_total')
+
+    driver_image_url = fields.Char()
+    driver_cnic_front_url = fields.Char()
+    driver_cnic_back_url = fields.Char()
+    vehicle_image_url = fields.Char()
 
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -89,24 +96,53 @@ class StockPickingInherit(models.Model):
 
         return super().copy(default)
 
+    def _get_image_from_url(self, url):
+        if not url:
+            return False
+        try:
+            response = requests.get(url, timeout=15)
+            if response.status_code == 200:
+                return base64.b64encode(response.content)
+        except Exception:
+            return False
+        return False
 
 
-    @api.model
-    def create(self, vals):
-        picking = super().create(vals)
-        if picking.origin:
-            # Purchase Order fallback
-            purchase_order = self.env['purchase.order'].search([('name', '=', picking.origin)], limit=1)
-            if purchase_order:
-                picking.bank_name = purchase_order.bank_name_id.id if purchase_order.bank_name_id else None
-                picking.account_title = purchase_order.account_title
-                picking.account_number = purchase_order.account_number
-                picking.sms_text = purchase_order.sms_text
-                picking.reference = purchase_order.reference
-                picking.bag_type = purchase_order.crm_lead_id.bag_type
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            # IMAGE DOWNLOAD LOGIC
+            if vals.get("driver_image_url"):
+                vals["driver_image"] = self._get_image_from_url(vals.get("driver_image_url"))
 
-        return picking
+            if vals.get("driver_cnic_front_url"):
+                vals["driver_cnic_front"] = self._get_image_from_url(vals.get("driver_cnic_front_url"))
+
+            if vals.get("driver_cnic_back_url"):
+                vals["driver_cnic_back"] = self._get_image_from_url(vals.get("driver_cnic_back_url"))
+
+            if vals.get("vehicle_image_url"):
+                vals["vehicle_image"] = self._get_image_from_url(vals.get("vehicle_image_url"))
+
+        # create records
+        pickings = super().create(vals_list)
+        for picking in pickings:
+            if picking.origin:
+                purchase_order = self.env['purchase.order'].search(
+                    [('name', '=', picking.origin)],
+                    limit=1
+                )
+
+                if purchase_order:
+                    picking.bank_name = purchase_order.bank_name_id.id if purchase_order.bank_name_id else False
+                    picking.account_title = purchase_order.account_title
+                    picking.account_number = purchase_order.account_number
+                    picking.sms_text = purchase_order.sms_text
+                    picking.reference = purchase_order.reference
+                    picking.bag_type = purchase_order.crm_lead_id.bag_type
+
+        return pickings
 
     def action_unloading(self):
         for picking in self:
@@ -146,8 +182,8 @@ class StockPickingInherit(models.Model):
                     missing.append("First Weight")
                 if not picking.nunber:
                     missing.append("Number")
-                if not picking.e_number:
-                    missing.append("E Number")
+                # if not picking.e_number:
+                #     missing.append("E Number")
                 if not picking.date_in:
                     missing.append("Date In")
                 if not picking.bag_type:
@@ -308,5 +344,4 @@ class StockPickingInherit(models.Model):
 
         result['arch'] = etree.tostring(node, encoding="unicode")
         return result
-
 

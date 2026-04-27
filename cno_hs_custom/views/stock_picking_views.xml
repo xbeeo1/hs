@@ -40,9 +40,9 @@
                                     <field name="driver_name" />
                                     <field name="driver_ph_number" />
                                      <field name="driver_cnic" />
-                                    <field name="driver_image" />
-                                    <field name="driver_cnic_front" />
-                                    <field name="driver_cnic_back" />
+                                    <field name="driver_image" widget="image" options="{'preview_image': 'driver_image', 'size': [100, 100]}"/>
+                                    <field name="driver_cnic_front" widget="image" options="{'preview_image': 'driver_cnic_front', 'size': [100, 100]}"/>
+                                    <field name="driver_cnic_back" widget="image" options="{'preview_image': 'driver_cnic_back', 'size': [100, 100]}"/>
                             </group>
                         </group>
                         <group>
@@ -50,7 +50,7 @@
                                     <field name="vehicle_type_id" />
                                     <field name="vehicle_number" />
                                      <field name="driver_cnic" />
-                                    <field name="vehicle_image" />
+                                    <field name="vehicle_image" widget="image" options="{'preview_image': 'vehicle_image', 'size': [100, 100]}"/>
                             </group>
                              <group string="Weight Information" >
                                     <field name="total_bags" />
