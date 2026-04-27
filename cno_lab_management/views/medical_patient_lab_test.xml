@@ -44,6 +44,7 @@
                                 <field name="partner_lab_id"  invisible ="outsourced_lab_request !=  True" required="outsourced_lab_request == True"/>
                                 <field name="gate_pass_no" />
                                 <field name="vehicle_number" />
+                                <field name="bag_type" />
                             </group>
                             <group>
                                 <field name="patient_id" required="1"

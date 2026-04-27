@@ -25,6 +25,15 @@
                                 </group>
                             </group>
                         </group>
+                        <group>
+                            <group string="UOM Conversion">
+                                <field name="conversion_value" />
+                                <field name="conversion_uom_id" />
+                            </group>
+                            <group string="Allow Negative Price">
+                                <field name="is_price_negative" />
+                            </group>
+                        </group>
                     </page>
                 </xpath>
             </field>

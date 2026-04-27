@@ -12,6 +12,9 @@ class ProductTemplateInheritFRM(models.Model):
     is_custom = fields.Boolean(string='Is Custom')
     bardana_weight = fields.Float(string='Product Weight')
     filled_bardana_weight = fields.Float(string='Filled Product Weight')
+    conversion_value = fields.Float(string="Conversion Value", )
+    conversion_uom_id = fields.Many2one("uom.uom", string="UOM")
+    is_price_negative = fields.Boolean(string='Is Price Negative')
 
 
 

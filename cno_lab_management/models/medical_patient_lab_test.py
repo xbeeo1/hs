@@ -24,7 +24,7 @@ class medical_patient_lab_test(models.Model):
 		readonly=True
 	)
 	patient_id = fields.Many2one('res.partner','Farmer' )
-	doctor_id = fields.Many2one('res.partner','Doctor',required=True)
+	doctor_id = fields.Many2one('res.partner','Lab Analyst',required=True)
 	lab_test_lines = fields.One2many('medical.patient.lab.test.line', 'lab_test_id',
 	                                 string="Lab Test Line")
 	gate_pass_no = fields.Char('Gate Pass No')
@@ -32,19 +32,32 @@ class medical_patient_lab_test(models.Model):
 	tokan_no = fields.Char('Tokan No')
 	sample_weight_gram = fields.Float(string='Sample Weight in Gram')
 	stock_picking_id = fields.Many2one('stock.picking','Stock Picking')
-	standard_bag_weight = fields.Float(string='Standard Bag Weight')
+	standard_bag_weight = fields.Float(string='Standard Bag Weight',compute='_compute_standard_bag_weight')
 	outsourced_lab_request = fields.Boolean(string="Outsourced Lab Request")
 
 	partner_lab_id = fields.Many2one(comodel_name='partner.lab', string="Partner Lab")
 
-	lab_res_created = fields.Boolean(default  =  False) 
-
+	lab_res_created = fields.Boolean(default  =  False)
+	bag_type = fields.Selection([('pp', 'PP'), ('Jute', 'Jute')], readonly=True)
 
 	@api.model_create_multi
 	def create(self, vals_list):
 		for vals in vals_list:
 			vals['request'] = self.env['ir.sequence'].next_by_code('test_seq')
-		return super(medical_patient_lab_test, self).create(vals_list) 
+		return super(medical_patient_lab_test, self).create(vals_list)
+
+	def _compute_standard_bag_weight(self):
+		for rec in self:
+			if rec.bag_type:
+				if rec.bag_type == 'pp':
+					rec.standard_bag_weight = 51
+				else:
+					rec.standard_bag_weight = 2
+			else:
+				rec.standard_bag_weight = 0
+
+
+
 
 	def cancel_lab_test(self):
 		self.write({'state': 'cancel'})

@@ -13,6 +13,9 @@ class ProductProductInherit(models.Model):
     filled_bardana_weight = fields.Float(string='Filled bardana Weight',related='product_tmpl_id.filled_bardana_weight', store=True)
     total_bardana_weight = fields.Float(string='T.B Weight',compute='_compute_total_bardana_weight')
     net_grain_weight = fields.Float(string='Net Grain Weight',compute='_compute_net_grain_weight')
+    conversion_value = fields.Float(string="Conversion Value",related='product_tmpl_id.conversion_value', store=True)
+    conversion_uom_id = fields.Many2one("uom.uom", string="Converted UOM",related='product_tmpl_id.conversion_uom_id', store=True)
+    is_price_negative = fields.Boolean(string='Is Price Negative',related='product_tmpl_id.is_price_negative', store=True)
 
 
     def _compute_total_bardana_weight(self):

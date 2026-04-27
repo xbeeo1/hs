@@ -25,7 +25,7 @@ class medical_lab(models.Model):
     requestor_physician_id = fields.Many2one('res.partner','Physician', required = True)
     critearea_ids = fields.One2many('medical_test.critearea','medical_lab_id', 'Critearea')
     results= fields.Text('Results')
-    diagnosis = fields.Text('Diagnosis')
+    diagnosis = fields.Text('Remarks')
     stock_picking_id = fields.Many2one('stock.picking', 'Stock Picking')
     gate_pass_no = fields.Char('Gate Pass No')
     vehicle_number = fields.Char(string='Vehicle Number')
