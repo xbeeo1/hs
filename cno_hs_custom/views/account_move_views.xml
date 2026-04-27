@@ -12,6 +12,11 @@
                     </attribute>
             </xpath>
 
+            <xpath expr="//field[@name='invoice_line_ids']//list//field[@name='product_uom_id']" position="after">
+                <field name="conversion_value" readonly="1"/>
+                <field name="conversion_uom_id" readonly="1"/>
+            </xpath>
+
             <xpath expr="//field[@name='invoice_line_ids']//list//field[@name='account_id']" position="attributes">
                 <attribute name="optional">hide</attribute>
             </xpath>

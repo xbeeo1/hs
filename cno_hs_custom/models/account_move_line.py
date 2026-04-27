@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import fields, models , api
 
 
 class AccountMoveLineInherit(models.Model):
@@ -11,6 +11,37 @@ class AccountMoveLineInherit(models.Model):
         compute='_compute_allowed_categories'
     )
 
+    conversion_value = fields.Float(string="Conversion Value",compute='_compute_conversion_value',store=True)
+    conversion_uom_id = fields.Many2one("uom.uom", string="Converted UOM", related='product_id.conversion_uom_id',
+                                        store=True)
+
     def _compute_allowed_categories(self):
         for rec in self:
             rec.allowed_category_ids = self.env.user.allowed_product_catg_id
+
+    @api.onchange('product_id', 'price_unit')
+    def _ensure_negative_price(self):
+        for line in self:
+            if line.product_id.is_price_negative and line.price_unit > 0:
+                line.price_unit = -abs(line.price_unit)
+
+    @api.model
+    def create(self, vals):
+        if 'product_id' in vals:
+            product = self.env['product.product'].browse(vals['product_id'])
+            if product.is_price_negative and vals.get('price_unit', 0) > 0:
+                vals['price_unit'] = -abs(vals['price_unit'])
+        return super().create(vals)
+
+    def write(self, vals):
+        res = super().write(vals)
+        for line in self:
+            if line.product_id.is_price_negative and line.price_unit > 0:
+                line.price_unit = -abs(line.price_unit)
+        return res
+
+    @api.depends('quantity', 'product_id')
+    def _compute_conversion_value(self):
+        for rec in self:
+            factor = rec.product_id.conversion_value or 0.0
+            rec.conversion_value = rec.quantity * factor

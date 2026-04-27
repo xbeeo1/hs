@@ -46,6 +46,11 @@
                         [('categ_id', 'in', allowed_category_ids)]
                     </attribute>
                 </xpath>
+
+                <xpath expr="//field[@name='order_line']/list//field[@name='product_uom_id']" position="after">
+                    <field name="conversion_value" readonly="1"/>
+                    <field name="conversion_uom_id" readonly="1"/>
+                </xpath>
             </field>
         </record>
 

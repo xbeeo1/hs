@@ -27,7 +27,7 @@ class StockPickingInherit(models.Model):
     driver_cnic_back = fields.Binary(string='Driver CNIC Back')
     warehouse_id = fields.Many2one(comodel_name='stock.warehouse', string='Warehouse')
     cust_location_id = fields.Many2one(comodel_name='stock.location', string='Location',domain="[('warehouse_id', '=', warehouse_id),('usage', '=', 'internal')]")
-    total_bags = fields.Integer(string='Total Bags')
+    total_bags = fields.Integer(string='Total Bags Unloaded')
     first_weight = fields.Float(string='First Weight')
     second_weight = fields.Float(string='Second Weight')
     net_weight = fields.Float(string='Net Weight')
@@ -42,7 +42,7 @@ class StockPickingInherit(models.Model):
         ('draft', 'Draft'),
         ('waiting', 'Waiting Another Operation'),
         ('confirmed', 'Waiting'),
-        ('assigned', 'Ready'),
+        ('assigned', 'Pending'),
         ('unloading', 'Unloading'),
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
@@ -223,7 +223,8 @@ class StockPickingInherit(models.Model):
                 'default_stock_picking_id': self.id or None,
                 'default_vehicle_number': self.vehicle_number or '',
                 'default_tokan_no': self.reference or None,
-                'default_gate_pass_no': self.name or None
+                'default_gate_pass_no': self.nunber or None,
+                'default_bag_type': self.bag_type or None,
             }
         }
 
