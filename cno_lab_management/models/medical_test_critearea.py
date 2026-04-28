@@ -32,7 +32,7 @@ class medical_test_critearea(models.Model):
     weight_1 = fields.Float('1st Bag')
     weight_2 = fields.Float('2nd Bag')
     weight_3 = fields.Float('3rd Bag')
-    weight_4 = fields.Float('4rd Bag')
+    weight_4 = fields.Float('4th Bag')
     avg_weight = fields.Float('Avg Weight')
     moisture_per = fields.Float('Moisture%')
     trash_statust = fields.Char('Trash Statust')
