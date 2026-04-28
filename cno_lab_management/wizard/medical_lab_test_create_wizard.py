@@ -27,7 +27,8 @@ class medical_lab_test_create(models.TransientModel):
                                            'tokan_no': browse_record.tokan_no or '',
                                            'gate_pass_no': browse_record.gate_pass_no or '',
                                             'sample_weight_gram': browse_record.sample_weight_gram or '',
-                                            'standard_bag_weight': browse_record.standard_bag_weight or ''
+                                            'standard_bag_weight': browse_record.standard_bag_weight or '',
+                                            'bag_type': browse_record.bag_type or '',
                                            })
                 critearea_lines = [(5, 0, 0)]
                 for cri in browse_record.medical_test_type_id.critearea_ids:

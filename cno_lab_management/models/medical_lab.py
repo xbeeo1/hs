@@ -13,26 +13,26 @@ class medical_lab(models.Model):
  
 
     name = fields.Char(string="Name", readonly=True, default='/')
-    test_id = fields.Many2one('medical.test_type', 'Test name', required = True)
+    test_id = fields.Many2one('medical.test_type', 'Test name', readonly=True)
     type = fields.Selection(
         related='test_id.type',
         store=True,
         readonly=True
     )
     date_analysis =  fields.Datetime('Date of the Analysis' , default = datetime.now())
-    patient_id = fields.Many2one('res.partner','Farmer', required = True)
-    date_requested = fields.Datetime('Date requested',  default = datetime.now())
-    requestor_physician_id = fields.Many2one('res.partner','Physician', required = True)
+    patient_id = fields.Many2one('res.partner','Farmer', readonly=True)
+    date_requested = fields.Datetime('Date requested',  default = datetime.now(), readonly=True)
+    requestor_physician_id = fields.Many2one('res.partner','Physician' , readonly=True)
     critearea_ids = fields.One2many('medical_test.critearea','medical_lab_id', 'Critearea')
     results= fields.Text('Results')
     diagnosis = fields.Text('Remarks')
     stock_picking_id = fields.Many2one('stock.picking', 'Stock Picking')
-    gate_pass_no = fields.Char('Gate Pass No')
-    vehicle_number = fields.Char(string='Vehicle Number')
-    tokan_no = fields.Char('Tokan No')
-    sample_weight_gram = fields.Float(string='Sample Weight in Gram')
-    standard_bag_weight = fields.Float(string='Standard Bag Weight')
-
+    gate_pass_no = fields.Char('Gate Pass No', readonly=True)
+    vehicle_number = fields.Char(string='Vehicle Number', readonly=True)
+    tokan_no = fields.Char('Tokan No', readonly=True)
+    sample_weight_gram = fields.Float(string='Sample weight in (G)', readonly=True)
+    standard_bag_weight = fields.Float(string='Standard Bag Weight', readonly=True)
+    bag_type = fields.Selection([('pp', 'PP'), ('Jute', 'Jute')], readonly=True)
 
     state = fields.Selection([('draft','Draft'),('approved','Approved'),('rejected','Rejected'),('cancelled','Cancelled')],default='draft')
 

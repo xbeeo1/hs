@@ -38,6 +38,7 @@
                                     required="1" />
                                 <field name="gate_pass_no" />
                                 <field name="vehicle_number" />
+                                <field name="bag_type" />
                             </group>
                             <group>
                                 <field name="test_id" required="1" />
@@ -51,7 +52,7 @@
                         </group>
                         <notebook> 
                             <page string = "Total Cases">  
-                                <field name="critearea_ids" widget="section_and_note_one2many" invisible="type != 'lab_analysis'" nolabel="1">
+                                <field name="critearea_ids" widget="section_and_note_one2many" invisible="type != 'lab_analysis'" readonly="state != 'draft'" nolabel="1">
                                     <list editable="top" string="Test Cases" decoration-danger="is_below_limit">
                                         <field name="seq" readonly="1"/>
                                         <field name="name" readonly="1"/>
@@ -72,7 +73,7 @@
                                 </field>
                                 <field name="critearea_ids" nolabel="1"
                                        widget="section_and_note_one2many"
-                                       invisible="type != 'random_quality_test'">
+                                       invisible="type != 'random_quality_test'" readonly="state != 'draft'">
 
                                     <list editable="bottom" string="Random Quality Test" decoration-danger="is_avg_weight">
                                         <field name="seq" />

@@ -3,7 +3,8 @@
 from email.policy import default
 
 from odoo import api, fields, models, _
-# classes under cofigration menu of laboratry 
+# classes under cofigration menu of laboratry
+from odoo.exceptions import ValidationError
 
 class medical_test_critearea(models.Model):
     _name  = 'medical_test.critearea'
@@ -26,12 +27,12 @@ class medical_test_critearea(models.Model):
     normal_range =  fields.Char('Limit')
     limit_int = fields.Integer('Limit Integer')
     remark = fields.Text('Remarks')
-    bag_dhang = fields.Char('Bag Dhang')
+    bag_dhang = fields.Char('No of Bag in Dhang')
     no_of_bag_drawn = fields.Integer('No of Bags Drawn')
-    weight_1 = fields.Float('1st Weight')
-    weight_2 = fields.Float('2nd Weight')
-    weight_3 = fields.Float('3rd Weight')
-    weight_4 = fields.Float('4rd Weight')
+    weight_1 = fields.Float('1st Bag')
+    weight_2 = fields.Float('2nd Bag')
+    weight_3 = fields.Float('3rd Bag')
+    weight_4 = fields.Float('4rd Bag')
     avg_weight = fields.Float('Avg Weight')
     moisture_per = fields.Float('Moisture%')
     trash_statust = fields.Char('Trash Statust')
@@ -45,6 +46,8 @@ class medical_test_critearea(models.Model):
             if rec.medical_lab_id and rec.medical_lab_id.test_id.auto_per_calculation:
                 sample_weight = rec.medical_lab_id.sample_weight_gram or 0.0
                 if sample_weight:
+                    if rec.gram > sample_weight:
+                        raise ValidationError('Gram value should be less than sample weight')
                     rec.percentage = (rec.gram / sample_weight) * 100
                 else:
                     rec.percentage = 0.0

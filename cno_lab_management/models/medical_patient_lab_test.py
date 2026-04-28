@@ -30,7 +30,7 @@ class medical_patient_lab_test(models.Model):
 	gate_pass_no = fields.Char('Gate Pass No')
 	vehicle_number = fields.Char(string='Vehicle Number')
 	tokan_no = fields.Char('Tokan No')
-	sample_weight_gram = fields.Float(string='Sample Weight in Gram')
+	sample_weight_gram = fields.Float(string='Sample weight in (G)')
 	stock_picking_id = fields.Many2one('stock.picking','Stock Picking')
 	standard_bag_weight = fields.Float(string='Standard Bag Weight',compute='_compute_standard_bag_weight')
 	outsourced_lab_request = fields.Boolean(string="Outsourced Lab Request")
@@ -52,7 +52,7 @@ class medical_patient_lab_test(models.Model):
 				if rec.bag_type == 'pp':
 					rec.standard_bag_weight = 51
 				else:
-					rec.standard_bag_weight = 2
+					rec.standard_bag_weight = 102
 			else:
 				rec.standard_bag_weight = 0
 
