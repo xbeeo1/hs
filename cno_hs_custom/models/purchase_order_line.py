@@ -45,4 +45,7 @@ class PurchaseOrderLine(models.Model):
     def _compute_conversion_value(self):
         for rec in self:
             factor = rec.product_id.conversion_value or 0.0
-            rec.conversion_value = rec.product_qty * factor
+            if factor > 0:
+                rec.conversion_value = rec.product_qty / factor
+            else:
+                rec.conversion_value = 0.0

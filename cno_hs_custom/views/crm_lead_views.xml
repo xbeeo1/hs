@@ -87,7 +87,7 @@
           <field name="arch" type="xml">
 
               <xpath expr="//button[@name='action_sale_quotations_new']" position="replace">
-                  <button string="Purchase Order" name="action_purchase_order_new" type="object" class="oe_highlight" data-hotkey="q" title="Create Purchase Order" invisible="type == 'lead' or probability == 0 and not active"/>
+                  <button string="Create Purchase Order" name="action_purchase_order_new" type="object" class="oe_highlight" data-hotkey="q" title="Create Purchase Order" invisible="type == 'lead' or probability == 0 and not active"/>
               </xpath>
               <xpath expr="//button[@name='action_view_sale_order']" position="replace">
                   <button name="action_view_purchase" type="object" class="oe_stat_button"

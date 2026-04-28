@@ -6,7 +6,8 @@ class ResPartnerInherit(models.Model):
 
     is_farmer = fields.Boolean(string="Is Farmer")
     is_doctor = fields.Boolean(string="Lab Analyst")
-    whatsapp_num = fields.Char(string='WhatsApp Number')
+    whatsapp_num = fields.Char(string='WhatsApp Number',default='+92')
+    ptcl_no = fields.Char(string='PTCL')
     division = fields.Char(string='Divisions')
     district = fields.Char(string='District')
     tehsil = fields.Char(string='tehsil')
@@ -15,7 +16,7 @@ class ResPartnerInherit(models.Model):
     date_of_birth = fields.Date(string="Date of Birth",required=True)
     village_id = fields.Many2one("farmer.village", string="Village",required=True)
     farmer_ref = fields.Char('Farmer Reference', copy=False, readonly=True, default=lambda s: s.env._('New'))
-
+    phone = fields.Char(default='+92')
 
 
     @api.model_create_multi
@@ -23,4 +24,14 @@ class ResPartnerInherit(models.Model):
         for vals in vals_list:
             if not vals.get('farmer_ref') or vals['farmer_ref'] == _('New'):
                 vals['farmer_ref'] = self.env['ir.sequence'].next_by_code('farmer.seq.no') or _('New')
+
+            # Phone validation
+            phone = vals.get('phone')
+            if phone and not phone.startswith('+92'):
+                raise ValidationError("Phone number must start with +92")
+
+            # WhatsApp validation
+            whatsapp_num = vals.get('whatsapp_num')
+            if whatsapp_num and not whatsapp_num.startswith('+92'):
+                raise ValidationError("WhatsApp number must start with +92")
         return super().create(vals_list)

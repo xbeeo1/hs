@@ -55,8 +55,10 @@
                              <group string="Weight Information" >
                                     <field name="total_bags" />
                                     <field name="first_weight" />
-                                     <field name="second_weight" invisible="state != 'unloading'"/>
-                                    <field name="net_weight" invisible="state != 'unloading'"/>
+                                     <field name="second_weight" invisible="state not in ['unloading','done']"/>
+                                    <field name="net_weight" invisible="state not in ['unloading','done']"/>
+                                    <field name="slip_net_weight" />
+                                    <field name="weight_diff" />
                             </group>
                         </group>
                         <group>

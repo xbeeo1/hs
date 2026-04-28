@@ -9,6 +9,7 @@
 
             <xpath expr="//field[@name='vat']" position="after">
                 <field name="whatsapp_num" />
+                <field name="ptcl_no" />
                 <field name="farmer_ref" placeholder="Reference...."/>
                 <field name="is_farmer" />
                 <field name="is_doctor" />
@@ -23,6 +24,10 @@
                     <field name="district" placeholder="District" class="o_address_state"/>
                     <field name="tehsil" placeholder="Tehsil" class="o_address_zip"/>
                 </div>
+            </xpath>
+
+            <xpath expr="//field[@name='phone']" position="attributes">
+                <attribute name="placeholder">Mobile</attribute>
             </xpath>
 
         </field>

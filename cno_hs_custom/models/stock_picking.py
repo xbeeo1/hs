@@ -32,8 +32,10 @@ class StockPickingInherit(models.Model):
     total_bags = fields.Integer(string='Total Bags Unloaded')
     first_weight = fields.Float(string='First Weight')
     second_weight = fields.Float(string='Second Weight')
-    net_weight = fields.Float(string='Net Weight')
+    net_weight = fields.Float(string='Net Weight', compute='_compute_net_weight', store=True)
     nunber = fields.Char(string='Gate pass')
+    slip_net_weight = fields.Float(string='Slip Net Weight')
+    weight_diff = fields.Float(string='Weight Diff.', compute='_compute_weight_diff', store=True)
     e_number = fields.Char(string='E Number')
     date_in = fields.Datetime(string='Date In')
     date_out = fields.Datetime(string='Date Out')
@@ -59,6 +61,22 @@ class StockPickingInherit(models.Model):
         'stock.warehouse',
         compute='_compute_allowed_warehouse'
     )
+
+    @api.constrains('first_weight', 'second_weight')
+    def _check_weights(self):
+        for rec in self:
+            if rec.second_weight > rec.first_weight:
+                raise ValidationError("Second weight cannot be greater than first weight.")
+
+    @api.depends('first_weight', 'second_weight')
+    def _compute_net_weight(self):
+        for rec in self:
+            rec.net_weight = rec.first_weight - rec.second_weight
+
+    @api.depends('slip_net_weight', 'net_weight')
+    def _compute_weight_diff(self):
+        for rec in self:
+            rec.weight_diff = rec.slip_net_weight - rec.net_weight
 
     def _compute_allowed_warehouse(self):
         for rec in self:

@@ -55,13 +55,13 @@ class CrmLeadInherit(models.Model):
             if rec.amount == 0.0:
                 raise ValidationError(" Amount should be greater than 0.")
 
-    @api.constrains('no_of_acers')
-    def _check_no_of_acers(self):
-        for rec in self:
-            if rec.no_of_acers > 10.0:
-                raise ValidationError(" No of acers cannot be greater than 10.")
-            if rec.no_of_acers == 0.0:
-                raise ValidationError("No of acers should be greater than 0.")
+    # @api.constrains('no_of_acers')
+    # def _check_no_of_acers(self):
+    #     for rec in self:
+    #         if rec.no_of_acers > 10.0:
+    #             raise ValidationError(" No of acers cannot be greater than 10.")
+    #         if rec.no_of_acers == 0.0:
+    #             raise ValidationError("No of acers should be greater than 0.")
 
     def _purchase_total(self):
         for rec in self:

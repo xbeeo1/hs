@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 
 class AccountPaymentRegister(models.TransientModel):
@@ -28,3 +29,18 @@ class AccountPaymentRegister(models.TransientModel):
     def _compute_remaining_balance(self):
         for x in self:
             x.remaining_balance = x.current_balance - x.amount
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        for rec in records:
+            if rec.current_balance < 0:
+                raise ValidationError(_("You have insufficient balance!"))
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        for rec in self:
+            if rec.current_balance < 0:
+                raise ValidationError(_("You have insufficient balance!"))
+        return res
